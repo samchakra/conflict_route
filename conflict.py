@@ -127,7 +127,7 @@ def calculate_safety(start_city, end_city, conflict_data):
         return "Dangerous", "danger"  # Red
 
 # Main section
-st.title("A Conflict-Aware Journey Through Lebanon")
+st.title("A Conflict-Aware Journey Through Lebanon by Sam Chakra")
 
 # Calculate and display safety factor in the sidebar
 if start_city != end_city:
