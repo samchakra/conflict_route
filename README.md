@@ -3,7 +3,7 @@
 ## Reproducibility and Code
 This Streamlit application provides an interactive visualization of conflict events in Lebanon, alongside tools to evaluate the safety of travel between cities. The dashboard highlights conflict data, safety indicators, and road routes based on user selections.
 
-[View the Dashboard on Streamlit](https://share.streamlit.io/)
+[View the Dashboard on Streamlit]([https://share.streamlit.io/](https://conflictroute-ad3syfyapdwg7azmubxkvz.streamlit.app/))
 
 ---
 
