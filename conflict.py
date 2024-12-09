@@ -94,7 +94,7 @@ with st.sidebar:
 # Load the conflict data
 # conflict_data_path = "MiddleEast_2015-2024_Oct11.csv"  # Ensure the file is in the same directory as this script
 # URL to your Google Drive file
-url = "https://drive.google.com/uc?id=1UQ10aiO60t13Ewq6jOiIR6IZ7SraD5Wc"
+url = "https://drive.google.com/uc?id=1tifH4dueJBc6XNMa0LyZqVrNY91ssYo_"
 
 output = "MiddleEast_2015-2024_Oct11.csv"
 # Download the file
