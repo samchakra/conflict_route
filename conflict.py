@@ -5,7 +5,6 @@ import requests
 import pandas as pd
 from datetime import datetime
 
-
 # Add custom CSS
 st.markdown(
     """
@@ -87,8 +86,9 @@ cities = {
 # Sidebar for user inputs
 with st.sidebar:
     st.header("Destination")
-    start_city = st.selectbox("Select Starting City:", cities.keys(), key="start")
-    end_city = st.selectbox("Select Destination City:", cities.keys(), key="end")
+    start_city = st.selectbox("Select Starting City:", sorted(cities.keys()), key="start")
+    end_city = st.selectbox("Select Destination City:", sorted(cities.keys()), key="end")
+
 
 # Load the conflict data
 conflict_data_path = "Filtered_Data.csv" 
@@ -119,12 +119,12 @@ def calculate_safety(start_city, end_city, conflict_data):
     end_conflicts = conflict_data[conflict_data["admin2"] == end_city].shape[0]
     total_conflicts = start_conflicts + end_conflicts
 
-    if total_conflicts == 0:
-        return "Safe", "safe" 
-    elif total_conflicts <= 5:
-        return "Warning", "warning"  
-    else:
-        return "Dangerous", "danger"  
+    if total_conflicts < 10:  
+        return "Safe", "safe"  # Green
+    elif 10 <= total_conflicts <= 20: 
+        return "Warning", "warning"  # Yellow
+    else: 
+        return "Dangerous", "danger"  # Red
 
 # Main section
 st.title("A Conflict-Aware Journey Through Lebanon")
@@ -155,7 +155,7 @@ for _, row in filtered_data.iterrows():
     fatalities = row["fatalities"]
     folium.CircleMarker(
         location=marker_location,
-        radius=3, 
+        radius=3,
         color="red",
         fill=True,
         fill_color="red",
@@ -165,8 +165,9 @@ for _, row in filtered_data.iterrows():
             f"Event: {row['event_type']} ({row['sub_event_type']})<br>"
             f"Actors: {row['actor1']} vs {row['actor2']}<br>"
             f"Fatalities: {fatalities}"
-        )
+        ),
     ).add_to(lebanon_map)
+
 
 # Auto-fit map bounds to include all markers
 if marker_bounds:
@@ -190,10 +191,21 @@ if start_city != end_city:
 
     if response.status_code == 200:
         data = response.json()
-
+        
         if "features" in data and len(data["features"]) > 0:
+            # Extract route geometry for mapping
             route_geometry = data["features"][0]["geometry"]["coordinates"]
-            route_coords = [[coord[1], coord[0]] for coord in route_geometry]  
+            route_coords = [[coord[1], coord[0]] for coord in route_geometry]
+
+            # Extract distance and duration
+            route_info = data["features"][0]["properties"]
+            distance_km = route_info["segments"][0]["distance"] / 1000 
+            duration_min = route_info["segments"][0]["duration"] / 60 
+
+            # Display distance and duration 
+            with st.sidebar:
+                st.write(f"**Distance:** {distance_km:.2f} km")
+                st.write(f"**Estimated Time:** {duration_min:.2f} minutes")
 
             folium.Marker(
                 location=start_coords,
