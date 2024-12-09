@@ -79,7 +79,10 @@ cities = {
     "Qoubaiyat": [34.5500, 36.2667],
     "Ras Baalbek": [34.2667, 36.4167],
     "Tannourine": [34.2000, 35.9000],
-    "Yammouneh": [34.1000, 36.0000]
+    "Yammouneh": [34.1000, 36.0000],
+    "Moukhtara": [33.6588, 35.6141],
+    "Aammatour": [33.6435, 35.6086],
+    "Kfar Nabrakh": [33.6961, 35.6309],
 }
 
 
