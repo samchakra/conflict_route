@@ -4,7 +4,6 @@ from streamlit_folium import st_folium
 import requests
 import pandas as pd
 from datetime import datetime
-import gdown
 
 
 # Add custom CSS for controlling the container width and safety indicator styling
@@ -92,21 +91,8 @@ with st.sidebar:
     end_city = st.selectbox("Select Destination City:", cities.keys(), key="end")
 
 # Load the conflict data
-# conflict_data_path = "MiddleEast_2015-2024_Oct11.csv"  # Ensure the file is in the same directory as this script
-# URL to your Google Drive file
-url = "https://drive.google.com/uc?id=1tifH4dueJBc6XNMa0LyZqVrNY91ssYo_"
-
-output = "MiddleEast_2015-2024_Oct11.csv"
-# Download the file
-print("Starting download...")
-result = gdown.download(url, output, quiet=False)
-
-if result:
-    print("File downloaded successfully:", result)
-    # Load the CSV data
-    data = pd.read_csv(output)
-else:
-    print("Download failed. Check the URL or file permissions.")
+conflict_data_path = "Filtered_Data.csv"  # Ensure the file is in the same directory as this script
+data = pd.read_csv(conflict_data_path)
 
 # Filter data based on criteria
 filtered_data = data[
