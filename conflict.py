@@ -6,7 +6,7 @@ import pandas as pd
 from datetime import datetime
 
 
-# Add custom CSS for controlling the container width and safety indicator styling
+# Add custom CSS
 st.markdown(
     """
     <style>
@@ -91,7 +91,7 @@ with st.sidebar:
     end_city = st.selectbox("Select Destination City:", cities.keys(), key="end")
 
 # Load the conflict data
-conflict_data_path = "Filtered_Data.csv"  # Ensure the file is in the same directory as this script
+conflict_data_path = "Filtered_Data.csv" 
 data = pd.read_csv(conflict_data_path)
 
 # Filter data based on criteria
@@ -119,13 +119,12 @@ def calculate_safety(start_city, end_city, conflict_data):
     end_conflicts = conflict_data[conflict_data["admin2"] == end_city].shape[0]
     total_conflicts = start_conflicts + end_conflicts
 
-    # Determine safety level based on total conflicts
     if total_conflicts == 0:
-        return "Safe", "safe"  # Green
+        return "Safe", "safe" 
     elif total_conflicts <= 5:
-        return "Warning", "warning"  # Yellow
+        return "Warning", "warning"  
     else:
-        return "Dangerous", "danger"  # Red
+        return "Dangerous", "danger"  
 
 # Main section
 st.title("A Conflict-Aware Journey Through Lebanon")
@@ -149,14 +148,14 @@ else:
 lebanon_map = folium.Map(location=[33.8938, 35.5018], zoom_start=8)
 
 # Add markers for filtered conflict events
-marker_bounds = []  # List to store all marker coordinates for fitting bounds
+marker_bounds = []  
 for _, row in filtered_data.iterrows():
     marker_location = [row["latitude"], row["longitude"]]
-    marker_bounds.append(marker_location)  # Add to bounds list
+    marker_bounds.append(marker_location) 
     fatalities = row["fatalities"]
     folium.CircleMarker(
         location=marker_location,
-        radius=3,  # Static size
+        radius=3, 
         color="red",
         fill=True,
         fill_color="red",
@@ -175,12 +174,11 @@ if marker_bounds:
 
 # Check if the selected cities are different for routing
 if start_city != end_city:
-    # Get coordinates for selected cities
     start_coords = cities[start_city]
     end_coords = cities[end_city]
 
     # Call OpenRouteService API for routing
-    ORS_API_KEY = "5b3ce3597851110001cf624879bb225755684f93a55db265edbf4603"  # Replace with your ORS token if needed
+    ORS_API_KEY = "5b3ce3597851110001cf624879bb225755684f93a55db265edbf4603"
     ors_url = "https://api.openrouteservice.org/v2/directions/driving-car"
     params = {
         "api_key": ORS_API_KEY,
@@ -193,12 +191,10 @@ if start_city != end_city:
     if response.status_code == 200:
         data = response.json()
 
-        # Check if 'features' key exists and is not empty
         if "features" in data and len(data["features"]) > 0:
             route_geometry = data["features"][0]["geometry"]["coordinates"]
-            route_coords = [[coord[1], coord[0]] for coord in route_geometry]  # Reverse lat/lon for Folium
+            route_coords = [[coord[1], coord[0]] for coord in route_geometry]  
 
-            # Add markers for start and end cities
             folium.Marker(
                 location=start_coords,
                 tooltip=start_city,
@@ -210,8 +206,7 @@ if start_city != end_city:
                 icon=folium.Icon(color="red", icon="stop"),
             ).add_to(lebanon_map)
 
-            # Add the route to the map
             folium.PolyLine(route_coords, color="blue", weight=5, opacity=0.8).add_to(lebanon_map)
 
-# Display the map as large as possible
+# Display the map
 st_folium(lebanon_map, width=1200, height=800)
